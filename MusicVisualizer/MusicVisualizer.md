@@ -13,6 +13,8 @@ Key | Do |
 **p** | pause
 **shift** | unpause
 **space** | delete Particles
+**scroll** | spawn Particles at Cursor
+**mouse press** | shoot Particles in direction
 **1-9** |  manual Spawn Particles
 
 #
