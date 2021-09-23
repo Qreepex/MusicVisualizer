@@ -25,12 +25,6 @@ When you made it the song will play and you can watch the show, and use the Keys
 After the Song has ended, the programm will stop it self. \
 Also, you can set a custim Background by putting a png with the name "Background" in the Folder where the MusicVisualizer.py is.
 
-
-#
-### **Preview**
-
-
-
 #
 ### My **[Github](https://github.com/flloschy)**
 #
