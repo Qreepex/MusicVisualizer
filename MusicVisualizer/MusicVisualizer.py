@@ -403,5 +403,5 @@ pygame.quit()
 stream.close()
 
 print("\n\n\n\n\n\n\n")
-print(col("-- Thanks for using this Music Visualizer --", "red", "on_cyan"))
+print(col("-- Thanks for using this Music Visualizer --", "red"))
 print("\n\n\n")
