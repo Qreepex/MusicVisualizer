@@ -5,7 +5,6 @@ pygame.init()
 
 ParticleProperties = [] # dont change anything
 
-# F:/Programme/pygamestuff/ParticleSim/Undertale.wav
 
 # Append helper
 # ParticleProperties.append({'sx': 0, 'sy': 0, 'size': 0, 'col': (255, 255, 255), 'life': 0, 'redubounce': 0, 'grav': 0, 'AirFric': 0,  'move': True, 'rect': pygame.Rect(0, 0, 0, 0)})
@@ -404,5 +403,5 @@ pygame.quit()
 stream.close()
 
 print("\n\n\n\n\n\n\n")
-print(col("-- Thanks for using this Music Visualizer --", "magenta", "on_white"))
+print(col("-- Thanks for using this Music Visualizer --", "red", "on_cyan"))
 print("\n\n\n")
