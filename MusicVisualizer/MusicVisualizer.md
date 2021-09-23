@@ -8,7 +8,7 @@ This **Music Visualizer** is based on **Particles**, these particles are spawned
 #
 ### **Keys**
 Key | Do |
-- | -
+--- | ---
 **ESC** | stop
 **p** | pause
 **shift** | unpause
