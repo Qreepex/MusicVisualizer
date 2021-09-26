@@ -1,16 +1,10 @@
-import pygame
-import sys
-import os
-import pyautogui
-import pyaudio
-import wave
-import audioop
-import time
+import pygame, sys, os, pyautogui, pyaudio, wave, audioop, time, datetime
 from random import randint as ri
 from termcolor import colored as col
 pygame.init()
 
-ParticleProperties = []  # dont change anything
+ParticleProperties = []
+ParticleCount = []
 
 # C:/Users/flosc/Downloads/Life is Fun - Ft. Boyinaband (Official Music Video).wav
 
@@ -27,8 +21,7 @@ ParticleProperties = []  # dont change anything
 #                                                                                                                                                                           Air Friction                          |
 #                                                                                                                                                                                                                       Rectangle
 
-realpath = str(os.path.realpath("./") + "/").replace("\\",
-                                                     "/")  # dont change anything
+realpath = str(os.path.realpath("./") + "/").replace("\\", "/")
 
 
 font = pygame.font.SysFont('comicsans', 20)
@@ -36,18 +29,18 @@ background = pygame.image.load(f"{realpath}MusicVisualizer/Background.png")
 
 width, height = pyautogui.size()
 
-Simheight = height//1.3
-Simwidth = width//1.3
+Simheight = height
+Simwidth = width
 
 Gravitation = 1  # Normal 1
 SimSpeed = 1  # Normal 1 || When Higher the Sim is slower || Not go under 1
 AirFriction = 0.05  # Normal 0.05
 Size = 10  # Normal 10
-redubounce = 1.5  # Normal 1.5
-lifeTime = 34  # Normal 34
-maxThrowSpeed = 150  # Normal 150
+redubounce = 10  # Normal 1.5
+lifeTime = 34  # Normal 34 || min 21
+maxThrowSpeed = 50  # Normal 50
 
-cursor = pygame.Rect(0, 0, Size, Size)
+cursor = pygame.Rect(0, 0, int(Size*1.5), int(Size*1.5))
 
 Delete = False
 
@@ -68,7 +61,7 @@ def checkPath():
         if not os.path.exists(path):
             print(col("-- path does not exists --", "red"))
             continue
-        print(col("Loading... Pleas stand by a bit.", "cyan"))
+        print(col("Loading Stuff...", "cyan"))
         return path
 
 
@@ -85,33 +78,40 @@ pygame.mouse.set_visible(False)
 def Spawn_Green():
     x, y = 0, 0
     x1 = Simwidth
-    for _ in range(0, 5):
+    for _ in range(0, 6):
         ParticleProperties.append({'sx': ri(5, 15), 'sy': ri(5, 15), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime-ri(
             0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': True})
         ParticleProperties.append({'sx': ri(-15, -5), 'sy': ri(5, 15), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime-ri(
             0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': True})
+        ParticleCount.append("")
+        ParticleCount.append("")
 
 
 def Spawn_Blue():
     x, y = 0, Simheight
     x1 = Simwidth
-    ParticleProperties.append({'sx': ri(28, 30), 'sy': ri(-40, -38), 'size': Size, 'col': (0+ri(0, 90), 0+ri(0, 90), 255-ri(0, 90)), 'life': lifeTime+lifeTime-ri(
-        0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': True})
-    ParticleProperties.append({'sx': ri(-30, -28), 'sy': ri(-40, -38), 'size': Size, 'col': (0+ri(0, 90), 0+ri(0, 90), 255-ri(0, 90)), 'life': lifeTime+lifeTime-ri(
-        0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': True})
+    for _ in range(0, 5):
+        ParticleProperties.append({'sx': ri(28, 30), 'sy': ri(-40, -38), 'size': Size, 'col': (0+ri(0, 90), 0+ri(0, 90), 255-ri(0, 90)), 'life': lifeTime+lifeTime-ri(
+            0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': True})
+        ParticleProperties.append({'sx': ri(-30, -28), 'sy': ri(-40, -38), 'size': Size, 'col': (0+ri(0, 90), 0+ri(0, 90), 255-ri(0, 90)), 'life': lifeTime+lifeTime-ri(
+            0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': True})
+        ParticleCount.append("")
+        ParticleCount.append("")
 
 
 def Spawn_Red():
-    for _ in range(0, 10):
+    for _ in range(0, 5):
         ParticleProperties.append({'sx': ri(-20, 20), 'sy': ri(-13, -5), 'size': Size, 'col': (255-ri(0, 100), 0+ri(0, 90), 0+ri(0, 90)), 'life': lifeTime-ri(
             0, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': AirFriction//2, 'move': True, 'rect': pygame.Rect(ri(0, Simwidth), Simheight, Size, Size), 'border': True})
+        ParticleCount.append("")
 
 
 def Spawn_Violet():
     x, y = ri(0, Simwidth), ri(0, Simheight)
-    for _ in range(0, 8):
+    for _ in range(0, 9):
         ParticleProperties.append({'sx': 0, 'sy': ri(-3, 0), 'size': Size, 'col': (135-ri(0, 40), 47+ri(0, 40), 186-ri(0, 40)), 'life': lifeTime-ri(
             0, 10), 'redubounce': redubounce, 'grav': -1, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': False})
+        ParticleCount.append("")
 
 
 def Spawn_Pink():
@@ -121,28 +121,34 @@ def Spawn_Pink():
         0, 10), 'redubounce': redubounce, 'grav': 1, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': False})
     ParticleProperties.append({'sx': ri(-4, 4), 'sy': ri(2, 5), 'size': Size, 'col': (245-ri(0, 40), 81-ri(0, 40), 217-ri(0, 40)), 'life': lifeTime+ri(
         0, 10), 'redubounce': redubounce, 'grav': 1, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x2, y, Size, Size), 'border': False})
+    ParticleCount.append("")
+    ParticleCount.append("")
 
 
 def Spawn_Gold():
     x, x1 = 0, Simwidth
-    for _ in range(0, 5):
+    for _ in range(0, 6):
         ParticleProperties.append({'sx': ri(0, 10), 'sy': ri(1, 7), 'size': Size, 'col': (255-ri(0, 90), 217-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime+ri(
             0, 10), 'redubounce': redubounce, 'grav': .4, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x, ri(0, Simheight), Size, Size), 'border': True})
         ParticleProperties.append({'sx': ri(-10, 0), 'sy': ri(1, 7), 'size': Size, 'col': (255-ri(0, 90), 217-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime+ri(
             0, 10), 'redubounce': redubounce, 'grav': .4, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x1, ri(0, Simheight), Size, Size), 'border': True})
+        ParticleCount.append("")
+        ParticleCount.append("")
 
 
 def Spawn_Cyan():
     x, y = Simwidth//2, Simheight//2
-    ParticleProperties.append({'sx': ri(-30, 30), 'sy': ri(-30, 30), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 162-ri(0, 90)), 'life': lifeTime+ri(
-        0, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': False})
+    for _ in range(0, 5):
+        ParticleProperties.append({'sx': ri(-30, 30), 'sy': ri(-30, 30), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 162-ri(0, 90)), 'life': lifeTime+ri(
+            0, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': False})
+        ParticleCount.append("")
 
 
 def Spawn_VioletPink():
     halfx = Simwidth//2
     halfy = Simheight//2
     spawn = 3
-    for _ in range(0, 40):
+    for _ in range(0, 10):
         ParticleProperties.append({'sx': ri(5, 50), 'sy': ri(-2, 2), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//ri(
             1, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(spawn, halfy, Size, Size), 'border': True})
         # Left
@@ -155,6 +161,10 @@ def Spawn_VioletPink():
         ParticleProperties.append({'sx': ri(-2, 2), 'sy': ri(-50, -5), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//ri(
             1, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(halfx, Simheight-spawn, Size, Size), 'border': True})
         # Buttom
+        ParticleCount.append("")
+        ParticleCount.append("")
+        ParticleCount.append("")
+        ParticleCount.append("")
 
 
 def Spawn_Rainbow():
@@ -163,11 +173,11 @@ def Spawn_Rainbow():
     for _ in range(0, 20):
         ParticleProperties.append({'sx': ri(-20, 20), 'sy': ri(-20, 20), 'size': Size, 'col': (0+ri(0, 255), 0+ri(0, 255), 0+ri(0, 255)), 'life': lifeTime+ri(
             1, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(halfx, halfy, Size, Size), 'border': True})
+        ParticleCount.append("")
 
 
 def SimulatePartic():
     for part in ParticleProperties:
-
         if part['life'] != -1:
             part['life'] = part['life'] - 1
         if part['life'] == 0:
@@ -215,9 +225,47 @@ def SimulatePartic():
         else:
             cursor.width = Size
             cursor.height = Size
+        pygame.draw.rect(WIN, part['col'], part['rect'])
 
+
+def ThrowSpeed():
+    speedx = -(x - Lockpos[0])
+    speedy = -(y - Lockpos[1])
+
+    mTS = maxThrowSpeed//10
+
+    if speedx > 0 and speedx < 1:
+        speedx = speedx*mTS
+    elif speedx > 0 and speedx > 1:
+        speedx = speedx//mTS
+    elif speedx < 0 and speedx < -1:
+        speedx = speedx//mTS
+    elif speedx < 0 and speedx > -1:
+        speedx = speedx*mTS
+
+    if speedy > 0 and speedy < 1:
+        speedy = speedy*mTS
+    elif speedy > 0 and speedy > 1:
+        speedy = speedy//mTS
+    elif speedy < 0 and speedy < -1:
+        speedy = speedy//mTS
+    elif speedy < 0 and speedy > -1:
+        speedy = speedy*mTS
+
+    if speedx > maxThrowSpeed:
+        speedx = maxThrowSpeed
+    elif speedx < -maxThrowSpeed:
+        speedx = -maxThrowSpeed
+    if speedy > maxThrowSpeed:
+        speedy = maxThrowSpeed
+    elif speedy < -maxThrowSpeed:
+        speedy = -maxThrowSpeed
+
+    return [speedx, speedy]
 
 ################################################################################
+
+
 maxValue = 2**15
 bars = 35
 chunk = 1024
@@ -229,6 +277,7 @@ stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
                 channels=wf.getnchannels(),
                 rate=wf.getframerate(),
                 output=True)
+
 ##############################################################################
 
 trigger_Violet = .05
@@ -243,14 +292,20 @@ trigger_Rainbow = .6
 trigger_ALL = .7
 
 ###############################################################################
+
 FPS = 0
 volume = 0
+highestVolume = 0
+highestParticleCount = 0
 clock = pygame.time.Clock()
 ticks = 0
 data = wf.readframes(chunk)
+print(col("Loaded...", "cyan"))
+print(col("Loading Song...", "cyan"))
 Song = pygame.mixer.Sound(songpath)
+a = datetime.datetime.now().replace(microsecond=0)
+print(col("Loaded...", "cyan"))
 Song.play()
-
 while True:
     start = time.time()
     clock.tick(60)
@@ -320,86 +375,28 @@ while True:
 
         elif event.type == pygame.MOUSEBUTTONUP and Locked:
             Locked = False
-            speedx = -(x - Lockpos[0])
-            speedy = -(y - Lockpos[1])
-
-            mTS = maxThrowSpeed//10
-
-            if speedx > 0 and speedx < 1:
-                speedx = speedx*mTS
-            elif speedx > 0 and speedx > 1:
-                speedx = speedx//mTS
-            elif speedx < 0 and speedx < -1:
-                speedx = speedx//mTS
-            elif speedx < 0 and speedx > -1:
-                speedx = speedx*mTS
-
-            if speedy > 0 and speedy < 1:
-                speedy = speedy*mTS
-            elif speedy > 0 and speedy > 1:
-                speedy = speedy//mTS
-            elif speedy < 0 and speedy < -1:
-                speedy = speedy//mTS
-            elif speedy < 0 and speedy > -1:
-                speedy = speedy*mTS
-
-            if speedx > maxThrowSpeed:
-                speedx = maxThrowSpeed
-            elif speedx < -maxThrowSpeed:
-                speedx = -maxThrowSpeed
-            if speedy > maxThrowSpeed:
-                speedy = maxThrowSpeed
-            elif speedy < -maxThrowSpeed:
-                speedy = -maxThrowSpeed
+            throw = ThrowSpeed()
+            speedx = throw[0]
+            speedy = throw[1]
 
             for _ in range(0, 10):
                 ParticleProperties.append({'sx': speedx+ri(-5, 5), 'sy': speedy+ri(-5, 5), 'size': Size, 'col': (255-ri(0, 100), 255-ri(0, 100), 255-ri(0, 100)), 'life': lifeTime*3,
                                           'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'colide': True, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': True})
+                ParticleCount.append("")
 
     if Locked:
         pygame.draw.line(WIN, (0, 0, 0), (x+(Size//2), y+(Size//2)),
                          (Lockpos[0]+(Size//2), Lockpos[1]+(Size//2)), width=2)
         pygame.draw.rect(WIN, (255, 0, 0), pygame.Rect(
             Lockpos[0], Lockpos[1], Size, Size))
-        speedx = -(x - Lockpos[0])
-        speedy = -(y - Lockpos[1])
-
-        mTS = maxThrowSpeed//10
-
-        if speedx > 0 and speedx < 1:
-            speedx = speedx*mTS
-        elif speedx > 0 and speedx > 1:
-            speedx = speedx//mTS
-        elif speedx < 0 and speedx < -1:
-            speedx = speedx//mTS
-        elif speedx < 0 and speedx > -1:
-            speedx = speedx*mTS
-
-        if speedy > 0 and speedy < 1:
-            speedy = speedy*mTS
-        elif speedy > 0 and speedy > 1:
-            speedy = speedy//mTS
-        elif speedy < 0 and speedy < -1:
-            speedy = speedy//mTS
-        elif speedy < 0 and speedy > -1:
-            speedy = speedy*mTS
-
-        if speedx > maxThrowSpeed:
-            speedx = maxThrowSpeed
-        elif speedx < -maxThrowSpeed:
-            speedx = -maxThrowSpeed
-        if speedy > maxThrowSpeed:
-            speedy = maxThrowSpeed
-        elif speedy < -maxThrowSpeed:
-            speedy = -maxThrowSpeed
+        throw = ThrowSpeed()
+        speedx = throw[0]
+        speedy = throw[1]
 
         WIN.blit(font.render(f"x{speedx}", 1,
                  (255, 255, 255)), (x-Size-5, y+Size+5))
         WIN.blit(font.render(f"y{speedy}", 1,
                  (255, 255, 255)), (x-Size-5, y+Size+Size+10))
-
-        # for _ in range(0, 1):
-        # ParticleProperties.append({'sx': randint(-20, 20), 'sy': randint(-20, 20), 'size': Size, 'col': (255, 255, 255), 'life': lifeTime, 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'colide': True, 'move': True, 'rect': pygame.Rect(x, y, Size, Size)})
 
     stream.write(data)
     DATA = wf.readframes(chunk)
@@ -425,7 +422,7 @@ while True:
     elif volume >= trigger_VioletPink:
         Spawn_VioletPink()
     elif volume >= trigger_Green2:
-        Spawn_Cyan
+        Spawn_Cyan()
     elif volume >= trigger_Red:
         Spawn_Red()
     elif volume >= trigger_Blue:
@@ -453,10 +450,6 @@ while True:
     elif FPS >= 10:
         WIN.blit(font.render(f"FPS: {FPS}", 1, (230, 64, 46)), (10, 70))
 
-    if ticks % 8 == 0:
-        FPS = round(1.0/(time.time()-start+.000000000000001), 1)
-        # print(f"Volume:{volumebar}\t   Fps: {FPS}\t   Particels: {len(ParticleProperties)}")
-
     if not Delete:
         pygame.draw.rect(WIN, (255, 0, 0), cursor)
     else:
@@ -466,16 +459,38 @@ while True:
     Delete = False
     ticks += 1
 
+    if volume > highestVolume:
+        highestVolume = volume
+    c = len(ParticleProperties)
+    if c > highestParticleCount:
+        highestParticleCount = c
+
     if ticks % SimSpeed == 0:
         SimulatePartic()
-    for p in ParticleProperties:
-        pygame.draw.rect(WIN, p['col'], p['rect'])
+    # for p in ParticleProperties:
+    #     pygame.draw.rect(WIN, p['col'], p['rect'])
 
     pygame.display.update()
+    if ticks % 2 == 0:
+        # print(f"Volume:{volumebar}\t   Fps: {FPS}\t   Particels: {len(ParticleProperties)}")
+        FPS = round(1.0/(time.time()-start+.00000001), 1)
+
+b = datetime.datetime.now().replace(microsecond=0)
+
 
 pygame.quit()
 stream.close()
 
 print("\n\n\n\n\n\n\n")
-print(col("-- Thanks for using this Music Visualizer --", "red"))
-print("\n\n\n")
+print(col("--", "cyan"))
+print(col("Highest Volume: ", "cyan"), end='')
+print(col(f"{round(highestVolume, 2)}", "yellow"))
+print(col("Highest Particle Count: ", "cyan"), end='')
+print(col(f"{int(highestParticleCount):,}", "yellow"))
+print(col("Spawned Particles: ", "cyan"), end='')
+print(col(f"{len(ParticleCount):,}", "yellow"))
+print(col("Time: ", "cyan"), end='')
+print(col(f"{b-a}", "yellow"))
+print(col("Thanks for using this ", "cyan"), end='')
+print(col("Music Visualizer", "yellow"), end='')
+print(col(".\n--", "cyan"), end='')
