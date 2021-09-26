@@ -6,7 +6,6 @@ pygame.init()
 ParticleProperties = []
 ParticleCount = []
 
-
 # Append helper
 # ParticleProperties.append({'sx': 0, 'sy': 0, 'size': 0, 'col': (255, 255, 255), 'life': 0, 'redubounce': 0, 'grav': 0, 'AirFric': 0,  'move': True, 'rect': pygame.Rect(0, 0, 0, 0)})
 #                                             speedx |                        |                                  |              |                        |              |                                           |
@@ -38,8 +37,9 @@ Size = 10  # Normal 10
 redubounce = 10  # Normal 1.5
 lifeTime = 34  # Normal 34 || min 21
 maxThrowSpeed = 50  # Normal 50
+particleMultiply = 30 # Normal
 
-cursor = pygame.Rect(0, 0, int(Size*1.5), int(Size*1.5))
+cursor = pygame.Rect(0, 0, Size, Size)
 
 Delete = False
 
@@ -77,11 +77,11 @@ pygame.mouse.set_visible(False)
 def Spawn_Green():
     x, y = 0, 0
     x1 = Simwidth
-    for _ in range(0, 6):
-        ParticleProperties.append({'sx': ri(5, 15), 'sy': ri(5, 15), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime-ri(
-            0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': True})
-        ParticleProperties.append({'sx': ri(-15, -5), 'sy': ri(5, 15), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime-ri(
-            0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': True})
+    for _ in range(0, particleMultiply):
+        ParticleProperties.append({'sx': ri(20, 35), 'sy': ri(5, 15), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime-ri(
+            0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction*1.5, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': True})
+        ParticleProperties.append({'sx': ri(-35, -20), 'sy': ri(5, 15), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime-ri(
+            0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction*1.5, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': True})
         ParticleCount.append("")
         ParticleCount.append("")
 
@@ -89,7 +89,7 @@ def Spawn_Green():
 def Spawn_Blue():
     x, y = 0, Simheight
     x1 = Simwidth
-    for _ in range(0, 5):
+    for _ in range(0, particleMultiply):
         ParticleProperties.append({'sx': ri(28, 30), 'sy': ri(-40, -38), 'size': Size, 'col': (0+ri(0, 90), 0+ri(0, 90), 255-ri(0, 90)), 'life': lifeTime+lifeTime-ri(
             0, 20), 'redubounce': redubounce, 'grav': Gravitation, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': True})
         ParticleProperties.append({'sx': ri(-30, -28), 'sy': ri(-40, -38), 'size': Size, 'col': (0+ri(0, 90), 0+ri(0, 90), 255-ri(0, 90)), 'life': lifeTime+lifeTime-ri(
@@ -99,7 +99,7 @@ def Spawn_Blue():
 
 
 def Spawn_Red():
-    for _ in range(0, 5):
+    for _ in range(0, particleMultiply):
         ParticleProperties.append({'sx': ri(-20, 20), 'sy': ri(-13, -5), 'size': Size, 'col': (255-ri(0, 100), 0+ri(0, 90), 0+ri(0, 90)), 'life': lifeTime-ri(
             0, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': AirFriction//2, 'move': True, 'rect': pygame.Rect(ri(0, Simwidth), Simheight, Size, Size), 'border': True})
         ParticleCount.append("")
@@ -107,7 +107,7 @@ def Spawn_Red():
 
 def Spawn_Violet():
     x, y = ri(0, Simwidth), ri(0, Simheight)
-    for _ in range(0, 9):
+    for _ in range(0, particleMultiply):
         ParticleProperties.append({'sx': 0, 'sy': ri(-3, 0), 'size': Size, 'col': (135-ri(0, 40), 47+ri(0, 40), 186-ri(0, 40)), 'life': lifeTime-ri(
             0, 10), 'redubounce': redubounce, 'grav': -1, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': False})
         ParticleCount.append("")
@@ -116,17 +116,30 @@ def Spawn_Violet():
 def Spawn_Pink():
     half = Simwidth//2
     y, x1, x2 = 0,  half-half//2, half+half//2
-    ParticleProperties.append({'sx': ri(-4, 4), 'sy': ri(2, 5), 'size': Size, 'col': (245-ri(0, 40), 81-ri(0, 40), 217-ri(0, 40)), 'life': lifeTime+ri(
-        0, 10), 'redubounce': redubounce, 'grav': 1, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': False})
-    ParticleProperties.append({'sx': ri(-4, 4), 'sy': ri(2, 5), 'size': Size, 'col': (245-ri(0, 40), 81-ri(0, 40), 217-ri(0, 40)), 'life': lifeTime+ri(
-        0, 10), 'redubounce': redubounce, 'grav': 1, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x2, y, Size, Size), 'border': False})
-    ParticleCount.append("")
-    ParticleCount.append("")
+    for _ in range(0, particleMultiply):
+        ParticleProperties.append({'sx': ri(-4, 4), 'sy': ri(2, 5), 'size': Size, 'col': (245-ri(0, 40), 81-ri(0, 40), 217-ri(0, 40)), 'life': lifeTime+ri(
+            0, 10), 'redubounce': redubounce, 'grav': 1, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': False})
+        ParticleProperties.append({'sx': ri(-4, 4), 'sy': ri(2, 5), 'size': Size, 'col': (245-ri(0, 40), 81-ri(0, 40), 217-ri(0, 40)), 'life': lifeTime+ri(
+            0, 10), 'redubounce': redubounce, 'grav': 1, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x2, y, Size, Size), 'border': False})
+        ParticleCount.append("")
+        ParticleCount.append("")
+
+
+def Spawn_Yellow():
+    half = Simwidth//2
+    y, x1, x2 = Simheight,  half-half//2, half+half//2
+    for _ in range(0, particleMultiply):
+        ParticleProperties.append({'sx': ri(-3, 3), 'sy': ri(-60, -40), 'size': Size, 'col': (212-ri(-20, 20), 188-ri(-20, 20), 104-ri(-20, 20)), 'life': lifeTime+ri(
+            5, 30), 'redubounce': redubounce, 'grav': 1, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x1, y, Size, Size), 'border': False})
+        ParticleProperties.append({'sx': ri(-3, 3), 'sy': ri(-60, -40), 'size': Size, 'col': (212-ri(-20, 20), 188-ri(-20, 20), 104-ri(-20, 20)), 'life': lifeTime+ri(
+            5, 30), 'redubounce': redubounce, 'grav': 1, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x2, y, Size, Size), 'border': False})
+        ParticleCount.append("")
+        ParticleCount.append("")
 
 
 def Spawn_Gold():
     x, x1 = 0, Simwidth
-    for _ in range(0, 6):
+    for _ in range(0, particleMultiply//4):
         ParticleProperties.append({'sx': ri(0, 10), 'sy': ri(1, 7), 'size': Size, 'col': (255-ri(0, 90), 217-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime+ri(
             0, 10), 'redubounce': redubounce, 'grav': .4, 'AirFric': AirFriction, 'move': True, 'rect': pygame.Rect(x, ri(0, Simheight), Size, Size), 'border': True})
         ParticleProperties.append({'sx': ri(-10, 0), 'sy': ri(1, 7), 'size': Size, 'col': (255-ri(0, 90), 217-ri(0, 90), 0+ri(0, 90)), 'life': lifeTime+ri(
@@ -137,9 +150,9 @@ def Spawn_Gold():
 
 def Spawn_Cyan():
     x, y = Simwidth//2, Simheight//2
-    for _ in range(0, 5):
-        ParticleProperties.append({'sx': ri(-30, 30), 'sy': ri(-30, 30), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 162-ri(0, 90)), 'life': lifeTime+ri(
-            0, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': False})
+    for _ in range(0, particleMultiply):
+        ParticleProperties.append({'sx': ri(-60, 60), 'sy': ri(-60, 60), 'size': Size, 'col': (0+ri(0, 90), 255-ri(0, 90), 162-ri(0, 90)), 'life': lifeTime//4
+             , 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(x, y, Size, Size), 'border': False})
         ParticleCount.append("")
 
 
@@ -147,18 +160,18 @@ def Spawn_VioletPink():
     halfx = Simwidth//2
     halfy = Simheight//2
     spawn = 3
-    for _ in range(0, 10):
-        ParticleProperties.append({'sx': ri(5, 50), 'sy': ri(-2, 2), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//ri(
-            1, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(spawn, halfy, Size, Size), 'border': True})
+    for _ in range(0, particleMultiply):
+        ParticleProperties.append({'sx': ri(40, 60), 'sy': ri(-1, 1), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//4,
+         'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(spawn, halfy, Size, Size), 'border': True})
         # Left
-        ParticleProperties.append({'sx': ri(-50, -5), 'sy': ri(-2, 2), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//ri(
-            1, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(Simwidth-spawn, halfy, Size, Size), 'border': True})
+        ParticleProperties.append({'sx': ri(-60, -40), 'sy': ri(-1, 1), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//4,
+         'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(Simwidth-spawn, halfy, Size, Size), 'border': True})
         # Right
-        ParticleProperties.append({'sx': ri(-2, 2), 'sy': ri(5, 50), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//ri(
-            1, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(halfx, spawn, Size, Size), 'border': True})
+        ParticleProperties.append({'sx': ri(-1, 1), 'sy': ri(40, 60), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//4,
+         'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(halfx, spawn, Size, Size), 'border': True})
         # Top
-        ParticleProperties.append({'sx': ri(-2, 2), 'sy': ri(-50, -5), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//ri(
-            1, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(halfx, Simheight-spawn, Size, Size), 'border': True})
+        ParticleProperties.append({'sx': ri(-1, 1), 'sy': ri(-60, -40), 'size': Size, 'col': (255-ri(0, 110), 0+ri(0, 70), 102+ri(-55, 50)), 'life': lifeTime//4,
+         'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(halfx, Simheight-spawn, Size, Size), 'border': True})
         # Buttom
         ParticleCount.append("")
         ParticleCount.append("")
@@ -169,7 +182,7 @@ def Spawn_VioletPink():
 def Spawn_Rainbow():
     halfx = Simwidth//2
     halfy = Simheight//2
-    for _ in range(0, 20):
+    for _ in range(0, particleMultiply):
         ParticleProperties.append({'sx': ri(-20, 20), 'sy': ri(-20, 20), 'size': Size, 'col': (0+ri(0, 255), 0+ri(0, 255), 0+ri(0, 255)), 'life': lifeTime+ri(
             1, 10), 'redubounce': redubounce, 'grav': 0, 'AirFric': 0, 'move': True, 'rect': pygame.Rect(halfx, halfy, Size, Size), 'border': True})
         ParticleCount.append("")
@@ -284,8 +297,9 @@ trigger_Pink = .1
 trigger_Gold = .15
 trigger_Green = .2
 trigger_Blue = .25
-trigger_Red = .3
+trigger_Yellow = .3
 trigger_Green2 = .4
+trigger_Red = .45
 trigger_VioletPink = .5
 trigger_Rainbow = .6
 trigger_ALL = .7
@@ -318,7 +332,6 @@ while True:
 
     if keys[pygame.K_SPACE]:
         Delete = True
-
     if keys[pygame.K_0]:
         Spawn_Blue()
         Spawn_Cyan()
@@ -420,10 +433,12 @@ while True:
         Spawn_Rainbow()
     elif volume >= trigger_VioletPink:
         Spawn_VioletPink()
-    elif volume >= trigger_Green2:
-        Spawn_Cyan()
     elif volume >= trigger_Red:
         Spawn_Red()
+    elif volume >= trigger_Green2:
+        Spawn_Cyan()
+    elif volume >= trigger_Yellow:
+        Spawn_Yellow()
     elif volume >= trigger_Blue:
         Spawn_Blue()
     elif volume >= trigger_Green:
