@@ -6,7 +6,6 @@ pygame.init()
 ParticleProperties = []
 ParticleCount = []
 
-# C:/Users/flosc/Downloads/Life is Fun - Ft. Boyinaband (Official Music Video).wav
 
 # Append helper
 # ParticleProperties.append({'sx': 0, 'sy': 0, 'size': 0, 'col': (255, 255, 255), 'life': 0, 'redubounce': 0, 'grav': 0, 'AirFric': 0,  'move': True, 'rect': pygame.Rect(0, 0, 0, 0)})
